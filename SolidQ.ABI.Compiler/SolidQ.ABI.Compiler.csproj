@@ -128,6 +128,7 @@
     <None Include="metadata\extract\Person__Person__VIW_FS.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="README.md" />
     <None Include="support\sql\setup-db.ps1" />
     <None Include="templates\extract\csv\full-csv-single.1.biml.liquid" />
     <None Include="templates\extract\csv\full-csv-single.1.sql.liquid" />
@@ -165,7 +166,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties metadata_2extract_2Person____Person____VIW__FS_1json__JSONSchema="C:\Work\AdaptiveBI\SolidQ\3.0\ABI-Prototype-branch-dm\ABI\metadata\_schemas\extract\full-viw.json" metadata_2__schemas_2extract_2full-single_1json__JSONSchema="C:\Work\AdaptiveBI\SolidQ\3.0\ABI-Prototype-branch-dm\ABI\metadata\_schemas\extract\full-single.json" />
+      <UserProperties metadata_2__schemas_2extract_2full-single_1json__JSONSchema="C:\Work\AdaptiveBI\SolidQ\3.0\ABI-Prototype-branch-dm\ABI\metadata\_schemas\extract\full-single.json" metadata_2extract_2Person____Person____VIW__FS_1json__JSONSchema="C:\Work\AdaptiveBI\SolidQ\3.0\ABI-Prototype-branch-dm\ABI\metadata\_schemas\extract\full-viw.json" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
