@@ -1,0 +1,14 @@
+﻿{
+  "ABI3": {
+    "Template": {
+      "Phase": "extract",
+      "Pattern": "full",
+      "Source": "viw",
+      "Implementation": "single",
+      "Version": 1
+    },
+    "Metadata": {
+      "Version": 1
+    }
+  }
+}

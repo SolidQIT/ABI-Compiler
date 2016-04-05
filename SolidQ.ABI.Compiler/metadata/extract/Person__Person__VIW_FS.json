@@ -1,0 +1,66 @@
+﻿{
+    "$schema": "metadata\\_schemas\\extract\\full-viw.json",
+    "ABI3": {
+        "Template": {
+            "Phase": "extract",
+            "Pattern": "full",
+            "Source": "viw",
+            "Implementation": "single",
+            "Version": 1
+        },
+        "Metadata": {
+            "Version": 1
+        }
+    },
+    "Object": {
+        "SourceObject": {
+            "Schema": "bi",
+            "Name": "vw_Person__Person",
+            "FullName": "[$(Object.SourceObject.Schema)].[$(Object.SourceObject.Name)]"
+        },
+        "DestinationTable": {
+            "Schema": "stg",
+            "Name": "Person__Person",
+            "FullName": "[$(Object.DestinationTable.Schema)].[$(Object.DestinationTable.Name)]",
+            "CreatePrimaryKey": 1,
+            "Columns": [
+                {
+                    "Name": "BusinessEntityID",
+                    "DataType": "int"
+                },
+                {
+                    "Name": "FirstName",
+                    "DataType": "nvarchar(50)"
+                },
+                {
+                    "Name": "LastName",
+                    "DataType": "nvarchar(50)"
+                },
+                {
+                    "Name": "MiddleName",
+                    "DataType": "nvarchar(50)"
+                },
+                {
+                    "Name": "PersonType",
+                    "DataType": "nchar(2)"
+                },
+                {
+                    "Name": "Title",
+                    "DataType": "nvarchar(8)"
+                }
+            ]
+        },
+        "PrimaryKeyColumns": [
+            "BusinessEntityID"
+        ]
+    },
+    "Connections": {
+        "Helpers": [
+            {
+                "Name": "HLP1",
+                "Database": "AdaptiveBI30_HLP_1",
+                "ConnectionString": "Data Source=localhost;Initial Catalog=$(Connections.Helpers[0].Database);Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False"
+            }
+        ]
+    }
+}

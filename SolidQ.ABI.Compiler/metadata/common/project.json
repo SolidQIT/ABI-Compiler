@@ -1,0 +1,8 @@
+﻿{
+  "ABI3": {
+    "Project": {
+      "Name": "AdaptiveBI30",
+      "TargetSQLPlatformVersion": "2012"
+    }
+  }
+}

@@ -1,0 +1,81 @@
+/*
+	===== BASE TEMPLATE 
+
+	Template:
+		Pattern			: Full 
+		Source			: View
+		Type			: SQL
+		Authors			: dmauri, megea
+		Revision		: 4
+		Created			: 2015-08-18, dmauri, megea
+		Updated			: 2015-08-26, dmauri
+	
+	Required:
+		MetadataVersion	: 1
+
+	======
+*/
+
+/*
+	===== CREATE STAGING OBJECTS
+*/
+
+USE [{{ Connections.Staging.Database }}]
+GO
+
+IF (OBJECT_ID('[{{ Object.DestinationTable.Schema }}].[{{ Object.DestinationTable.Name }}]') IS NOT NULL)
+  DROP TABLE [{{ Object.DestinationTable.Schema }}].[{{ Object.DestinationTable.Name }}];
+GO
+
+IF (OBJECT_ID('[{{ Object.DestinationTable.Schema }}].[{{ Object.DestinationTable.Name }}$Changes]') IS NOT NULL)
+  DROP TABLE [{{ Object.DestinationTable.Schema }}].[{{ Object.DestinationTable.Name }}$Changes];
+GO
+
+CREATE TABLE [{{ Object.DestinationTable.Schema }}].[{{ Object.DestinationTable.Name }}]
+(
+	{% for Column in Object.DestinationTable.Columns -%}
+	[{{ Column.Name }}] {{ Column.DataType }},
+	{% endfor -%}
+	[$sq_extract_tag] int not null,
+	[$sq_log_id] int not null
+);
+GO
+
+CREATE TABLE [{{ Object.DestinationTable.Schema }}].[{{ Object.DestinationTable.Name }}$Changes]
+(
+	{% for Column in Object.DestinationTable.Columns -%}
+	[{{ Column.Name }}] {{ Column.DataType }},
+	{% endfor -%}
+	[$sq_extract_tag] int not null,
+	[$sq_log_id] int not null,	
+	[$sq_operation_id] tinyint not null,
+	[$sq_row_hash] bigint not null
+);
+GO
+
+{% if Object.DestinationTable.CreatePrimaryKey == 1 -%}
+
+{% for Column in Object.DestinationTable.Columns -%}
+{% if Object.PrimaryKeyColumns contains Column.Name -%}
+ALTER TABLE [{{ Object.DestinationTable.Schema }}].[{{ Object.DestinationTable.Name }}]
+ALTER COLUMN [{{ Column.Name }}] {{ Column.DataType }} NOT NULL;
+GO
+
+ALTER TABLE [{{ Object.DestinationTable.Schema }}].[{{ Object.DestinationTable.Name }}$Changes]
+ALTER COLUMN [{{ Column.Name }}] {{ Column.DataType }} NOT NULL;
+GO
+{% endif -%}
+{% endfor -%}
+
+ALTER TABLE [{{ Object.DestinationTable.Schema }}].[{{ Object.DestinationTable.Name }}]
+ADD CONSTRAINT [pk__{{ Object.DestinationTable.Name }}] PRIMARY KEY CLUSTERED ([$sq_extract_tag], {{ Object.PrimaryKeyColumns | Join: ',' }})
+GO
+
+ALTER TABLE [{{ Object.DestinationTable.Schema }}].[{{ Object.DestinationTable.Name }}$Changes]
+ADD CONSTRAINT [pk__{{ Object.DestinationTable.Name }}$Changes] PRIMARY KEY CLUSTERED ([$sq_extract_tag], [$sq_log_id], {{ Object.PrimaryKeyColumns }})
+GO
+{% endif -%}
+
+/*
+	===== BASE TEMPLATE END
+*/

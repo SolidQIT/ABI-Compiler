@@ -1,0 +1,55 @@
+﻿{
+    "ABI": {
+        "MetadataVersion": 1,
+        "Phase": "load",
+        "PatternId": "dim-load",
+        "SourceTypeId": "VIW"
+    },
+	"Object": {
+        "SourceObject": {
+            "Schema": "etl",
+            "Name": "Dim_Product",
+            "FullName": "etl.Dim_Product", 
+			"SourceQuery" :"select * from etl.Dim_Product"
+			
+        },
+        "DestinationTable": {
+            "Schema": "dim",
+            "Name": "Product",
+            "FullName": "dim.Product",
+            "CreatePrimaryKey": 1,
+            "Columns": [
+			{"Name":"pkProductID","DataType":"int","SCDType":"1"},
+			{"Name":"ProductName","DataType":"nvarchar(50)","SCDType":"0"},
+			{"Name":"ProductNumber","DataType":"nvarchar(25)","SCDType":"2"},
+			{"Name":"SubcategoryName","DataType":"nvarchar(50)","SCDType":"1"},
+			{"Name":"CategoryName","DataType":"nvarchar(50)","SCDType":"1"},
+			{"Name":"ExecutionId","DataType":"bigint","SCDType":"1"},
+            ]
+        },
+        "PrimaryKeyColumns": [
+            "pkProductID"
+        ],
+		"IncrementalColumnName":"Executionid",
+		"CatchDeletedAsSource":"None"
+    },
+    "Connections": {
+        "Metadata": {
+            "Name": "AdaptiveBI30_MD",
+            "ConnectionString": "Data Source=localhost;Initial Catalog=AdaptiveBI30_MD;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False"
+        },
+        "Log": {
+            "Name": "AdaptiveBI30_LOG",
+            "ConnectionString": "Data Source=localhost;Initial Catalog=AdaptiveBI30_LOG;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False"
+        },
+        "Staging": {
+            "Name": "AdaptiveBI30_STG",
+            "ConnectionString": "Data Source=localhost;Initial Catalog=AdaptiveBI30_STG;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False"
+        },
+        "DataWarehouse": 
+            {
+                "Name": "AdaptiveBI30_DWH",
+                "ConnectionString": "Data Source=localhost;Initial Catalog=AdaptiveBI30_DWH;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False"
+            }
+    }
+}

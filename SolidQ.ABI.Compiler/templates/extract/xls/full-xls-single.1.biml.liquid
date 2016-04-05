@@ -1,0 +1,122 @@
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+  <Connections>
+    <OleDbConnection Name="MD" ConnectionString="{{ Connections.Metadata.ConnectionString }}" CreateInProject="true" />
+    <OleDbConnection Name="STG" ConnectionString="{{ Connections.Staging.ConnectionString }}" CreateInProject="true" />
+    <OleDbConnection Name="LOG" ConnectionString="{{ Connections.Log.ConnectionString }}" CreateInProject="true" />
+    <OleDbConnection Name="CFG" ConnectionString="{{ Connections.Configuration.ConnectionString }}" CreateInProject="true" />
+    <OleDbConnection Name="XLS" ConnectionString="{{ Object.SourceObject.ConnectionString }}" CreateInProject="false" />
+  </Connections>  
+  <Packages>
+    <Package Name="Load_STG_{{ Object.DestinationTable.Name }}" ConstraintMode="Parallel" ProtectionLevel="EncryptSensitiveWithUserKey">
+      <Annotations>
+        <Annotation AnnotationType="Description">
+          <![CDATA[ 
+              SolidQ Adaptive BI Framework 3.0
+
+	            Template: 
+		            Name: Full Single 
+                Source: XLS
+		            Authors: dmauri
+		            Revision: 1
+	
+	            Required:
+		            MetadataVersion: 1
+
+	            Compilation:
+		            Date: {{ ABI.Compiler.CompilationDateTime }}
+          ]]>
+        </Annotation>
+      </Annotations>
+      <Variables>
+        <Variable Name="LoadedRows" DataType="Int32" Namespace="User">0</Variable>
+        <Variable Name="IsActive" DataType="String" Namespace="User">N</Variable>
+        <Variable Name="LogRowId" DataType="Int32" Namespace="User">0</Variable>
+      </Variables>
+      <Tasks>
+        <ExecuteSQL Name="Check Load Active" ConnectionName="CFG" ResultSet="SingleRow">
+          <DirectInput>SELECT active_for_load AS active FROM cfg.[extract_phase] WHERE source_object_name = '{{ Object.SourceObject.Name }}';</DirectInput>
+          <Results>
+            <Result Name="active" VariableName="User.IsActive"/>
+          </Results>
+        </ExecuteSQL>
+        <ExecuteSQL Name="Set Load Start" ConnectionName="LOG" ResultSet="SingleRow">
+          <PrecedenceConstraints>
+            <Inputs>
+              <Input OutputPathName="Check Load Active.Output" EvaluationOperation="ExpressionAndConstraint" EvaluationValue="Success" Expression='@[User::IsActive] == "Y"'/>
+            </Inputs>
+          </PrecedenceConstraints>
+          <DirectInput>
+            DECLARE @rowId INT;
+            EXEC @rowId = [log].stp_etl_table_load_info_set_start '{{ Object.DestinationTable.Schema }}', '{{ Object.DestinationTable.Name }}', 'F', ?;
+            SELECT CAST(@rowId AS INT) AS RowId
+          </DirectInput>
+          <Parameters>
+            <Parameter Name="@serverExecutionId" VariableName="System.ServerExecutionID" DataType="Int64" Direction="Input"/>
+          </Parameters>
+          <Results>
+            <Result Name="RowId" VariableName="User.LogRowId" />
+          </Results>
+        </ExecuteSQL>
+        <Container ConstraintMode="Linear" Name="Load Data">
+          <PrecedenceConstraints>
+            <Inputs>
+              <Input OutputPathName="Set Load Start.Output" EvaluationOperation="Constraint" EvaluationValue="Success"/>
+            </Inputs>
+          </PrecedenceConstraints>
+          <Tasks>
+            <ExecuteSQL Name="Clean Staging Table" ConnectionName="STG">
+              <DirectInput>TRUNCATE TABLE {{ Object.DestinationTable.FullName }};</DirectInput>
+            </ExecuteSQL>
+            {% for Worksheet in Object.SourceObject.ExcelFile.Worksheets -%}
+            <Dataflow Name="Load Staging Table From Worksheet '{{ Worksheet.Name }}'">
+              <Transformations>
+                <OleDbSource Name="XLS" ConnectionName="XLS">
+                  <DirectInput>SELECT * FROM [{{ Worksheet.Name }}]</DirectInput>
+                </OleDbSource>
+                <DerivedColumns Name="Add Metadata">
+                  <InputPath OutputPathName="XLS.Output"/>
+                  <Columns>
+                    <Column Name="$sq_log_id" DataType="Int32">@LogRowId</Column>
+                    <Column Name="$sq_extract_tag" DataType="Int32">{{ forloop.index }}</Column>
+                  </Columns>
+                </DerivedColumns>
+                <RowCount Name="Count Rows" VariableName="User.LoadedRows">
+                  <InputPath OutputPathName="Add Metadata.Output" />
+                </RowCount>
+                <OleDbDestination Name="STG" ConnectionName="STG" UseFastLoadIfAvailable="true">
+                  <InputPath OutputPathName="Count Rows.Output" />
+                  <ExternalTableOutput Table="{{ Object.DestinationTable.FullName }}" />
+                </OleDbDestination>
+              </Transformations>
+            </Dataflow>            
+            {% endfor -%}
+          </Tasks>
+        </Container>
+        <ExecuteSQL Name="Set Load End Success" ConnectionName="LOG">
+          <PrecedenceConstraints>
+            <Inputs>
+              <Input OutputPathName="Load Data.Output" EvaluationOperation="Constraint" EvaluationValue="Success"/>
+            </Inputs>
+          </PrecedenceConstraints>
+          <DirectInput>EXEC [log].stp_etl_table_load_info_set_end ?, ?, 'S';</DirectInput>
+          <Parameters>
+            <Parameter Name="@rowId" VariableName="User.LogRowId" DataType="Int32" Direction="Input" />
+            <Parameter Name="@rows" VariableName="User.LoadedRows" DataType="Int32" Direction="Input" />
+          </Parameters>
+        </ExecuteSQL>
+        <ExecuteSQL Name="Set Load End Failure" ConnectionName="LOG">
+          <PrecedenceConstraints>
+            <Inputs>
+              <Input OutputPathName="Load Data.Output" EvaluationOperation="Constraint" EvaluationValue="Failure"/>
+            </Inputs>
+          </PrecedenceConstraints>
+          <DirectInput>EXEC [log].stp_etl_table_load_info_set_end ?, ?, 'F';</DirectInput>
+          <Parameters>
+            <Parameter Name="@rowId" VariableName="User.LogRowId" DataType="Int32" Direction="Input" />
+            <Parameter Name="@rows" VariableName="User.LoadedRows" DataType="Int32" Direction="Input" />
+          </Parameters>
+        </ExecuteSQL>
+      </Tasks>
+    </Package>
+  </Packages>
+</Biml>

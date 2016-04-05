@@ -1,0 +1,85 @@
+﻿
+{
+	"$schema" : "",
+	"ABI" :
+	{
+		"MetadataVersion" : 1,
+		"Phase" : "load",
+		"PatternId" : "fact"
+	},
+	"Fact" :
+	{
+		"Name" : "budgetagenti",
+		"Columns" : [
+			{
+				"Name" : "bk_codice_ditta",
+				"DataType" : "int",
+				"Type" : "BusinessKey"
+			}, 
+			{
+				"Name" : "bk_codice_deposito",
+				"DataType" : "int",
+				"Type" : "BusinessKey"
+			}, 
+			{
+				"Name" : "bk_codice_agente",
+				"DataType" : "char(5)",
+				"Type" : "BusinessKey"
+			},
+			{
+				"Name" : "Data",
+				"DataType" : "datetime",
+				"Type" : "Fact"
+			},
+			{
+				"Name" : "ImportoBudgetMin",
+				"DataType" : "decimal(15, 2)",
+				"Type" : "Fact"
+			},
+			{
+				"Name" : "ImportoBudgetMax",
+				"DataType" : "decimal(15, 2)",
+				"Type" : "Fact"
+			}
+		],
+		"RelatedDimensions" :
+		[
+			{
+				"FullName" : "[dwh].[dim_ditte]",
+				"BusinessKeys" : [
+					{
+						"Name" : "CodiceDitta",
+						"FactName" : "bk_codice_ditta"
+					},
+					{
+						"Name" : "CodiceDeposito",
+						"FactName" : "bk_codice_deposito"
+					}
+				],
+				"SurrogateKey" :
+				{
+					"Name" : "id_dim_ditte"
+				}
+			},
+			{
+				"FullName" : "[dwh].[dim_agenti]",
+				"BusinessKeys" : [
+					{
+						"Name" : "CodiceAgente",
+						"FactName" : "bk_codice_agente"
+					}
+				],
+				"SurrogateKey" :
+				{
+					"Name" : "id_dim_agenti"
+				}
+			}
+		]
+	},
+	"Source" :
+	{
+		"Schema" : "etl",
+		"Name" : "vw_fact_$(Fact.Name)",
+		"FullName" : "[$(Source.Schema)].[$(Source.Name)]"
+	}
+}

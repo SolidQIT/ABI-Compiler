@@ -1,0 +1,59 @@
+﻿{
+    "ABI3": {
+        "Template": {
+            "Phase": "extract",
+            "Pattern": "full",
+            "Source": "xls",
+            "Implementation": "single",
+            "Version": 1
+        },
+        "Metadata": {
+            "Version": 1
+        }
+    },
+    "Object": {
+        "SourceObject": {
+            "Name": "person_1.xls",
+            "ExcelFile": {
+                "FilePath": "C:\\Work\\AdaptiveBI\\_Private\\3.0\\SSIS\\person_1.xlsx",
+                "Query": ""
+            },
+            "ConnectionString": "Data Source=$(Object.SourceObject.ExcelFile.FilePath);Provider=Microsoft.ACE.OLEDB.12.0;Extended Properties=&quot;Excel 12.0;HDR=YES;&quot;"
+        },
+        "DestinationTable": {
+            "Schema": "stg",
+            "Name": "Person__Person",
+            "FullName": "[$(Object.DestinationTable.Schema)].[$(Object.DestinationTable.Name)]",
+            "CreatePrimaryKey": 1,
+            "Columns": [
+                {
+                    "Name": "BusinessEntityID",
+                    "DataType": "int"
+                },
+                {
+                    "Name": "FirstName",
+                    "DataType": "nvarchar(255)"
+                },
+                {
+                    "Name": "LastName",
+                    "DataType": "nvarchar(255)"
+                },
+                {
+                    "Name": "MiddleName",
+                    "DataType": "nvarchar(255)"
+                },
+                {
+                    "Name": "PersonType",
+                    "DataType": "nvarchar(255)"
+                },
+                {
+                    "Name": "Title",
+                    "DataType": "nvarchar(255)"
+                }
+            ]
+        },
+        "PrimaryKeyColumns": [
+            "BusinessEntityID"
+        ]
+    }
+}

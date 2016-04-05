@@ -1,0 +1,34 @@
+﻿{
+  "Connections": {
+    "Metadata": {
+      "Name": "MD",
+      "Database": "$(ABI3.Project)_MD",
+      "ConnectionString": "Data Source=localhost;Initial Catalog=$(Connections.Metadata.Database);Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False"
+    },
+    "Log": {
+      "Name": "LOG",
+      "Database": "$(ABI3.Project)_LOG",
+      "ConnectionString": "Data Source=localhost;Initial Catalog=$(Connections.Log.Database);Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False"
+    },
+    "Staging": {
+      "Name": "STG",
+      "Database": "$(ABI3.Project)_STG",
+      "ConnectionString": "Data Source=localhost;Initial Catalog=$(Connections.Staging.Database);Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False"
+    },
+    "Configuration": {
+      "Name": "CFG",
+      "Database": "$(ABI3.Project)_CFG",
+      "ConnectionString": "Data Source=localhost;Initial Catalog=$(Connections.Configuration.Database);Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False"
+    },
+    "DataIntegration": {
+      "Name": "DI",
+      "Database": "$(ABI3.Project)_DI",
+      "ConnectionString": "Data Source=localhost;Initial Catalog=$(Connections.DataIntegration.Database);Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False"
+    },
+    "DataWarehouse": {
+      "Name": "DWH",
+      "Database": "$(ABI3.Project)_DWH",
+      "ConnectionString": "Data Source=localhost;Initial Catalog=$(Connections.DataWarehouse.Database);Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False"
+    }
+  }
+}
