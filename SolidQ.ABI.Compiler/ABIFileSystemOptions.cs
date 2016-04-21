@@ -10,7 +10,7 @@ namespace SolidQ.ABI.Compiler
         public const string StandardMetadataFileExtension = ".json";
         public const string StandardExtendedMetadataFileExtension = ".ext.json";
 
-        private const string DefaultSchemaFolder = "_schema";
+        private const string DefaultSchemaFolder = "_schemas";
         private const string DefaultCommonMetadataFolder = "common";
         private const string DefaultMetadataSearchPattern = "*" + StandardMetadataFileExtension;
 
