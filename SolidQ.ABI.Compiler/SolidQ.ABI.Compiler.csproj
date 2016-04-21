@@ -88,80 +88,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="support\lib\dotliquid\DotLiquid.dll" />
-    <Content Include="support\lib\dotliquid\DotLiquid.pdb" />
-    <Content Include="support\sql\ddl\sample\setup-etl-views.sql" />
-    <Content Include="support\sql\ddl\setup-hlp-1-views.sql" />
-    <Content Include="support\sql\ddl\setup-hlp-2-views.sql" />
-    <Content Include="support\sql\ddl\setup-stg-objects.sql" />
-    <Content Include="support\sql\setup-objects.sql" />
-    <Content Include="support\sql\setup-sample.sql" />
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="metadata\common\connections.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="metadata\common\project.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="metadata\extract\Person__Person__XLS_FS.json" />
-    <None Include="metadata\extract\test.json" />
-    <None Include="metadata\load\Product_DIM.json" />
-    <None Include="metadata\load\Sales_Fact.json" />
-    <None Include="metadata\test-basic.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="metadata\test\test\test-basic.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="metadata\_schemas\extract\full-viw.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="metadata\extract\Person__Person__CSV_FS.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="metadata\extract\Sales__Customer__VIW_FL.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="metadata\extract\Sales__Store__VIW_FP.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="metadata\test-plugin.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
-    <None Include="metadata\extract\Person__Person__VIW_FS.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="README.md" />
-    <None Include="support\sql\setup-db.ps1" />
-    <None Include="templates\extract\csv\full-csv-single.1.biml.liquid" />
-    <None Include="templates\extract\csv\full-csv-single.1.sql.liquid" />
-    <None Include="templates\extract\viw\full-viw-loop.1.biml.liquid" />
-    <None Include="templates\extract\viw\full-viw-loop.1.sql.liquid" />
-    <None Include="templates\extract\viw\full-viw-parallel.1.biml.liquid" />
-    <None Include="templates\extract\viw\full-viw-parallel.1.sql.liquid" />
-    <None Include="templates\extract\viw\full-viw-single.1.biml.liquid" />
-    <None Include="templates\extract\viw\full-viw-single.1.sql.liquid" />
-    <None Include="templates\extract\viw\test-viw-single-with_my_extension_in_name.1.txt.liquid" />
-    <None Include="templates\extract\viw\test-viw-single.1.sql.liquid" />
-    <None Include="templates\extract\xls\full-xls-single.1.biml.liquid" />
-    <None Include="templates\extract\xls\full-xls-single.1.sql.liquid" />
-    <None Include="templates\extract\_full.liquid" />
-    <None Include="templates\test-with_my_extension_in_name.1.txt.liquid" />
-    <None Include="templates\test.1.sql.liquid" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="support\lib\dotliquid\DotLiquid.dll" />
+    <Content Include="support\lib\dotliquid\DotLiquid.pdb" />
     <Content Include="support\lib\dotliquid\it\DotLiquid.resources.dll" />
-    <Content Include="support\sql\ddl\setup-cfg-objects.sql" />
-    <Content Include="support\sql\ddl\sample\setup-hlp-1-views.sql" />
-    <Content Include="support\sql\ddl\sample\setup-hlp-2-views.sql" />
-    <Content Include="support\sql\ddl\setup-log-objects.sql" />
-    <Content Include="support\sql\ddl\setup-md-objects.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="support\sql\dml\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SolidQ.ABI.Extensibility\SolidQ.ABI.Extensibility.csproj">
