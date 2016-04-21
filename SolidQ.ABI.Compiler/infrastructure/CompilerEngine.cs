@@ -231,8 +231,10 @@ namespace SolidQ.ABI.Compiler.Infrastructure
             else
             {
                 _logger.Info("$schema element found, attempting validation");
-                fileSchema = Path.Combine(_options.RootPath, fileSchema);
 
+                if (fileSchema.StartsWith("/")) fileSchema = "." + fileSchema;
+                fileSchema = Path.GetFullPath(Path.Combine(_options.RootPath, fileSchema.Replace("/", "\\")));            
+                
                 _logger.Debug("$schema file path is '{0}'", fileSchema);
 
                 if (!File.Exists(fileSchema))
