@@ -21,7 +21,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure
         public CompilerEngine(ABIFileSystemOptions options, LogFactory factory)
         {
             _logger = factory.GetCurrentClassLogger();
-            _options = options;
+            _options = options;           
         }
 
         private void Initialize()

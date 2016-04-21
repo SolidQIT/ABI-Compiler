@@ -109,6 +109,12 @@
     <None Include="metadata\extract\test.json" />
     <None Include="metadata\load\Product_DIM.json" />
     <None Include="metadata\load\Sales_Fact.json" />
+    <None Include="metadata\test-basic.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="metadata\test\test\test-basic.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="metadata\_schemas\extract\full-viw.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -121,7 +127,7 @@
     <None Include="metadata\extract\Sales__Store__VIW_FP.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="metadata\test.json">
+    <None Include="metadata\test-plugin.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

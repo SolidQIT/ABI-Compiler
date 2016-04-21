@@ -1,0 +1,14 @@
+﻿{
+  "ABI3": {
+    "Template": {
+      "Phase": "",
+      "Pattern": "test",
+      "Source": "",
+      "Implementation": "",
+      "Version": 1
+    },
+    "Metadata": {
+      "Version": 1
+    }
+  }
+}

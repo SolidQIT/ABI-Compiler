@@ -1,0 +1,17 @@
+﻿{
+  "ABI3": {
+    "Template": {
+      "Phase": "",
+      "Pattern": "test",
+      "Source": "",
+      "Implementation": "",
+      "Version": 1
+    },
+    "Metadata": {
+      "Version": 1
+    }
+  },
+  "Object": {
+    "Test": "$$Run-Plugin::Foo['Value1', 'Value2', 'Value3']"
+  }
+}
