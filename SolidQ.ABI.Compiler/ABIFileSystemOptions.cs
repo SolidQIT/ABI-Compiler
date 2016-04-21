@@ -92,6 +92,9 @@ namespace SolidQ.ABI.Compiler
             _metadataFolder = metadataFolder;
             _templateFolder = templateFolder;
             _outputFolder = outputFolder;
+
+            rootPath = Path.GetFullPath(rootPath);
+
             _rootPath = rootPath;
         }
 
