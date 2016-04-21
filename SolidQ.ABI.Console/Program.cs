@@ -4,6 +4,7 @@ using SolidQ.ABI.CommandLine.Options;
 using SolidQ.ABI.Compiler;
 using System;
 using System.Configuration;
+using System.Reflection;
 
 namespace SolidQ.ABI
 {
@@ -24,6 +25,7 @@ namespace SolidQ.ABI
 #if DEBUG
             _logger.Info("DEBUG Compile");
 #endif
+            _logger.Info("{0} v{1}", Assembly.GetExecutingAssembly().GetName().Name, Assembly.GetExecutingAssembly().GetName().Version);
             _logger.Info("{0} v{1}", ABIFileSystemCompiler.Name, ABIFileSystemCompiler.Version);
             _logger.Info("");
 
@@ -35,8 +37,10 @@ namespace SolidQ.ABI
                     (errs) =>
                     {
                         foreach (var error in errs)
+                        {
+                            if (!((error is HelpRequestedError) || (error is HelpVerbRequestedError))) 
                             _logger.Error(ErrorArgumentParsingFailedMessageFormat, error.Tag);
-
+                        }
                         return ErrorArgumentParsingFailed;
                     }
                 );
@@ -48,16 +52,16 @@ namespace SolidQ.ABI
 
         private static int Compile(CompileOptions compileOptions)
         {
-            var metadataSearchSubDirectories = Convert.ToBoolean(compileOptions.MetadataSearchSubDirectories ?? ConfigurationManager.AppSettings["MetadataSearchSubDirectories"] ?? bool.TrueString);
+            var metadataSearchSubDirectories =  Convert.ToBoolean(ConfigurationManager.AppSettings["MetadataSearchSubDirectories"] ?? bool.TrueString);
 
             var metadataSearchPattern = compileOptions.MetadataSearchPattern ?? ConfigurationManager.AppSettings["MetadataSearchPattern"] ?? "*.json";
             if (metadataSearchPattern.EndsWith("*"))
                 metadataSearchPattern += ABIFileSystemOptions.StandardMetadataFileExtension;
 
-            var fileSystemRootPath = compileOptions.FileSystemRootPath ?? ConfigurationManager.AppSettings["FileSystemRootPath"] ?? @".";
-            var metadataFolderName = compileOptions.MetadataFolderName ?? ConfigurationManager.AppSettings["MetadataFolderName"] ?? @"metadata";
-            var templateFolderName = compileOptions.TemplateFolderName ?? ConfigurationManager.AppSettings["TemplateFolderName"] ?? @"templates";
-            var outputFolderName = compileOptions.OutputFolderName ?? ConfigurationManager.AppSettings["OutputFolderName"] ?? @"output";
+            var fileSystemRootPath = ConfigurationManager.AppSettings["FileSystemRootPath"] ?? @".";
+            var metadataFolderName = ConfigurationManager.AppSettings["MetadataFolderName"] ?? @"metadata";
+            var templateFolderName = ConfigurationManager.AppSettings["TemplateFolderName"] ?? @"templates";
+            var outputFolderName = ConfigurationManager.AppSettings["OutputFolderName"] ?? @"output";
 
             var options = new ABIFileSystemOptions(
                 rootPath: fileSystemRootPath,
