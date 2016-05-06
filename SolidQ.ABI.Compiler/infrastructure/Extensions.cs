@@ -58,7 +58,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure
                 {
                     Expression = m.Groups["expression"].Value,
                     Name = m.Groups["name"].Value,
-                    Arguments = m.Groups["arguments"].Value
+                    Arguments = Regex.Unescape(m.Groups["arguments"].Value)
                         .Split(',') // do not use StringSplitOptions.RemoveEmptyEntries
                         .Select((a) => a.Trim(new[] { ' ', '\'' }))
                         .ToArray()
