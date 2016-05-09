@@ -100,7 +100,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure
 
                     dynamic pluginResult;
 
-                    #region Executing plugin
+                    #region Execute plugin
 
                     _logger.Info("Executing plugin '{0}' - '{1}' - '{2}'", plugin.Name, plugin.Version, plugin.Description);
                     plugin.Initialize(_logger.Factory);

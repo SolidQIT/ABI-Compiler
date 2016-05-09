@@ -100,7 +100,7 @@ namespace SolidQ.ABI.Plugin.Common.MetadataCompiler
                 throw new ArgumentException("Invalid parameters number");
 
             if (args.Any((a) => a == null))
-                throw new ArgumentException("Same parameter is null");
+                throw new ArgumentException("Some parameter is null");
 
             #endregion
 

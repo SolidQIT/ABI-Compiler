@@ -199,7 +199,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure
 
             #endregion
 
-            #region Compiler metadata
+            #region Compile metadata
 
             _logger.Info("Generating compiler metadata");
             var compilerInfo = new

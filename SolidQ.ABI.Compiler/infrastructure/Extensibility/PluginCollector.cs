@@ -34,17 +34,6 @@ namespace SolidQ.ABI.Compiler.Infrastructure.Extensibility
                 plugins.AddRange(bootstrapper.MetadataCompilers);               
             }
 
-            /*
-            **  Collect new plugins here
-            **
-            using (var container = new PluginCompositionContainer<XYZPluginBootstrapper>())
-            {
-                var bootstrapper = container.Compose();
-
-                plugins.AddRange(bootstrapper.XYZs);
-            }
-            */
-
             var duplicatedPlugins = plugins.GroupBy((p) => p.Name)
                 .Where((g) => g.Count() > 1)
                 .Select((g) => g.Key)
