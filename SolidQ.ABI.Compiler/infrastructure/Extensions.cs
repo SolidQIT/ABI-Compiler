@@ -58,7 +58,8 @@ namespace SolidQ.ABI.Compiler.Infrastructure
                 {
                     Expression = m.Groups["expression"].Value,
                     Name = m.Groups["name"].Value,
-                    Arguments = m.Groups["arguments"].Value
+                    //Arguments = m.Groups["arguments"].Value
+                    Arguments = Regex.Unescape(m.Groups["arguments"].Value)
                         .Split(',') // do not use StringSplitOptions.RemoveEmptyEntries
                         .Select((a) => a.Trim(new[] { ' ', '\'' }))
                         .ToArray()
@@ -129,7 +130,8 @@ namespace SolidQ.ABI.Compiler.Infrastructure
                     if (!(pluginResult is JValue))
                         replaceExpression = "\"" + expression.Expression + "\"";
 
-                    resolvedJson = resolvedJson.Replace(replaceExpression, pluginResult.ToString().Replace("\\\\", "\\"));
+                    //resolvedJson = resolvedJson.Replace(replaceExpression, pluginResult.ToString().Replace("\\\\", "\\"));
+                    resolvedJson = resolvedJson.Replace(replaceExpression, pluginResult.ToString());
                 }
 
                 _logger.Info("Parsing resolved plugin metadata");
