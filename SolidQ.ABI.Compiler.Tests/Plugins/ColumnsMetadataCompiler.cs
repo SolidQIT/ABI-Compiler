@@ -12,6 +12,7 @@ namespace SolidQ.ABI.Compiler.Tests.Plugins
     {      
         // The string must be escaped to fit into a JSON document: the single backslash must be specified using a double backslash.
         // If you don't have a named instance to use, you can just create an Alias to your default instance via SQL Server Configuration Manager
+        // The Alias used here is: test\named
         private static string _connectionStringNamed = @"Provider=SQLNCLI11.1; Data Source=test\\named;Initial Catalog=TempDB;Integrated Security=SSPI;";
         private static string _connectionStringDefault = @"Provider=SQLNCLI11.1; Data Source=localhost;Initial Catalog=TempDB;Integrated Security=SSPI;";
 
