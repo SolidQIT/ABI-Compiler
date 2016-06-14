@@ -76,7 +76,9 @@ namespace SolidQ.ABI.Plugin.Common.MetadataCompiler
         {
             get
             {
-                return "Plugin parameters are: connectionString, tableSchema, tableName, [connectionType]";
+                return
+                    "Plugin parameters are: connectionString, tableSchema, tableName, [connectionType]" + Environment.NewLine +
+                    "connectionType is opional and supports OLEDB and ODBC. If omitted OLEDB is assumed.";
             }
         }
 

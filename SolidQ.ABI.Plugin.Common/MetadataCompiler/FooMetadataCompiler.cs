@@ -46,6 +46,14 @@ namespace SolidQ.ABI.Plugin.Common.MetadataCompiler
             }
         }
 
+        public string Help
+        {
+            get
+            {
+                return "A sample plugin. It will just print all the argument passed.";
+            }
+        }
+
         #endregion
 
         public void Initialize(LogFactory log)

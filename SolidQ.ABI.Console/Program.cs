@@ -2,9 +2,12 @@
 using NLog;
 using SolidQ.ABI.CommandLine.Options;
 using SolidQ.ABI.Compiler;
+using SolidQ.ABI.Extensibility;
+using SolidQ.ABI.Compiler.Infrastructure.Extensibility;
 using System;
 using System.Configuration;
 using System.Reflection;
+using System.Linq;
 
 namespace SolidQ.ABI
 {
@@ -93,7 +96,33 @@ namespace SolidQ.ABI
 
         private static int Plugins(PluginsOptions pluginsOptions)
         {
-            _logger.Warn(ErrorArgumentVerbNotImplemented);
+            if (pluginsOptions.Action.ToLower() == "list")
+            {
+                PluginCollector collector = new PluginCollector();
+
+                _logger.Info("Plugins found: {0}", collector.Plugins.Count);
+                foreach (var plugin in collector.Plugins)
+                {
+                    _logger.Info("- {0} v.{1}: {2}", plugin.Name, plugin.Version, plugin.Description);
+                }
+            }
+
+            if (pluginsOptions.Action.ToLower() == "help")
+            {
+                PluginCollector collector = new PluginCollector();
+                var plugin = collector.Plugins.SingleOrDefault((p) => p.Name.Equals(pluginsOptions.PluginName, StringComparison.InvariantCultureIgnoreCase));
+                if (plugin != null)
+                {
+                    plugin.Initialize(_logger.Factory);
+                    _logger.Info("{0} v.{1}", plugin.Name, plugin.Version);
+                    _logger.Info("by {0}", plugin.Author);
+                    _logger.Info(plugin.Description);
+                    _logger.Info(plugin.Help);
+                    plugin.Shutdown();
+                }
+
+                _logger.Warn(ErrorArgumentVerbNotImplemented);
+            }
 
             return 0;
         }

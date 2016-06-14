@@ -9,6 +9,7 @@ namespace SolidQ.ABI.Extensibility
         string Author { get; }
         string Version { get; }
         string Description { get; }
+        string Help { get; }
         void Initialize(LogFactory log);
         void Shutdown();
     }

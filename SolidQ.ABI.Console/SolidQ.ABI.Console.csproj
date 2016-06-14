@@ -129,6 +129,10 @@
       <Project>{4c178a07-4aa4-4e14-bb29-adce65cb6902}</Project>
       <Name>SolidQ.ABI.Compiler</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SolidQ.ABI.Extensibility\SolidQ.ABI.Extensibility.csproj">
+      <Project>{044b6604-da38-484c-b87c-c12df6f0c613}</Project>
+      <Name>SolidQ.ABI.Extensibility</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

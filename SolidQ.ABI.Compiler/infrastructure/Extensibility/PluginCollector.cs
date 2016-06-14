@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace SolidQ.ABI.Compiler.Infrastructure.Extensibility
 {
-    internal class PluginCollector : IDisposable
+    public class PluginCollector : IDisposable
     {
         private ReadOnlyCollection<IPlugin> _plugins;
         private bool _disposed;
