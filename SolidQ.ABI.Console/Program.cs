@@ -30,9 +30,10 @@ namespace SolidQ.ABI
             _logger.Info("");
 
             var result = Parser.Default
-                .ParseArguments<CompileOptions, ValidateOptions>(args)
+                .ParseArguments<CompileOptions, ValidateOptions, PluginsOptions>(args)
                 .MapResult(
                     (CompileOptions opts) => Compile(opts),
+                    (PluginsOptions opts) => Plugins(opts),
                     (ValidateOptions opts) => Validate(opts),
                     (errs) =>
                     {
@@ -84,6 +85,13 @@ namespace SolidQ.ABI
         }
 
         private static int Validate(ValidateOptions compileOptions)
+        {
+            _logger.Warn(ErrorArgumentVerbNotImplemented);
+
+            return 0;
+        }
+
+        private static int Plugins(PluginsOptions pluginsOptions)
         {
             _logger.Warn(ErrorArgumentVerbNotImplemented);
 

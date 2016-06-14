@@ -5,6 +5,7 @@ using System;
 using System.ComponentModel.Composition;
 using System.Data;
 using System.Data.OleDb;
+using System.Data.Odbc;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -20,9 +21,11 @@ namespace SolidQ.ABI.Plugin.Common.MetadataCompiler
             SELECT
                 t.COLUMN_NAME,
 	            COLUMN_DATA_TYPE = CASE
-                    WHEN t.DATA_TYPE IN('varchar', 'char', 'nvarchar', 'nchar', 'binary')
+                    WHEN t.DATA_TYPE IN('varchar', 'char', 'nvarchar', 'nchar', 'binary', 'varbinary')
                         THEN LOWER(t.DATA_TYPE) + '(' + CAST(t.CHARACTER_MAXIMUM_LENGTH AS VARCHAR(10)) + ')'
-		            WHEN t.DATA_TYPE IN ('decimal', 'numeric')
+                    WHEN t.DATA_TYPE IN('time', 'datetime2', 'datetimeoffset')
+                        THEN LOWER(t.DATA_TYPE) + '(' + CAST(t.[DATETIME_PRECISION] AS VARCHAR(10)) + ')'		
+		            when t.DATA_TYPE IN ('decimal', 'numeric')
                         THEN LOWER(t.DATA_TYPE) + '(' + CAST(t.NUMERIC_PRECISION AS VARCHAR(10)) + ',' + CAST(t.NUMERIC_SCALE AS VARCHAR(10)) + ')'
 		            ELSE LOWER(t.DATA_TYPE)
                 END,
@@ -69,6 +72,14 @@ namespace SolidQ.ABI.Plugin.Common.MetadataCompiler
             }
         }
 
+        public string Help
+        {
+            get
+            {
+                return "Plugin parameters are: connectionString, tableSchema, tableName, [connectionType]";
+            }
+        }
+
         #endregion
 
         public void Initialize(LogFactory log)
@@ -85,7 +96,7 @@ namespace SolidQ.ABI.Plugin.Common.MetadataCompiler
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="args">A string array that contains plugin parameters [connectionString, tableSchema, tableName]</param>
+        /// <param name="args">A string array that contains plugin parameters [connectionString, tableSchema, tableName, connectionType]</param>
         /// <returns>A string representing JObject</returns>
         public dynamic Compile(params string[] args)
         {
@@ -96,28 +107,38 @@ namespace SolidQ.ABI.Plugin.Common.MetadataCompiler
             if (args == null)
                 throw new ArgumentNullException("args");
 
-            if (args.Length != 3)
+            if (args.Length < 3 || args.Length > 4)
                 throw new ArgumentException("Invalid parameters number");
 
             if (args.Any((a) => a == null))
                 throw new ArgumentException("Some parameter is null");
 
+            string connectionType = "OLEDB";
+            if(args.Length == 4)
+            {
+                connectionType = args[3].ToUpper();
+                if (connectionType != "OLEDB" && connectionType != "ODBC")
+                    throw new ArgumentException("connectionType parameter can OLEDB or ODBC only");
+            }
+
             #endregion
 
-            using (var table = GetColumnsMetadata(connectionString: args[0], tableSchema: args[1], tableName: args[2]))
+            using (var table = GetColumnsMetadata(connectionString: args[0], tableSchema: args[1], tableName: args[2], connectionType: connectionType))
                 return FormatColumnsMetadata(table);
         }
 
-        private DataTable GetColumnsMetadata(string connectionString, string tableSchema, string tableName)
+        private DataTable GetColumnsMetadata(string connectionString, string tableSchema, string tableName, string connectionType)
         {
             var columnsMetadataCommand = string.Format(ColumnsMetadataCommandFormat, tableSchema, tableName);
-            
-            using (var connection = new OleDbConnection(connectionString))
+
+            using (IDbConnection connection = CreateConnectionObject(connectionString, connectionType))
             {
                 connection.Open();
 
-                using (var command = new OleDbCommand(columnsMetadataCommand, connection))
+                using (var command = connection.CreateCommand())
                 {
+                    command.CommandText = columnsMetadataCommand;
+
                     using (var reader = command.ExecuteReader())
                     {
                         var table = new DataTable();
@@ -126,6 +147,20 @@ namespace SolidQ.ABI.Plugin.Common.MetadataCompiler
                     }
                 }
             }
+        }
+
+        private IDbConnection CreateConnectionObject(string connectionString, string connectionType)
+        {
+            IDbConnection connection = null;
+
+            _logger.Debug("Driver: {0}", connectionType);
+
+            if (connectionType == "OLEDB")
+                connection = new OleDbConnection(connectionString);
+            else
+                connection = new OdbcConnection(connectionString);
+
+            return connection;
         }
 
         private dynamic FormatColumnsMetadata(DataTable table)

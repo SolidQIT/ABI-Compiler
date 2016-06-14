@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandLine\Options\PluginOptions.cs" />
     <Compile Include="CommandLine\Options\ValidateOptions.cs" />
     <Compile Include="CommandLine\Options\UploadOptions.cs" />
     <Compile Include="CommandLine\Options\GenerateOptions.cs" />
@@ -77,6 +78,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="metadata\common\project.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="metadata\extract\test-plugin.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="metadata\extract\test-with-schema.json">

@@ -1,0 +1,46 @@
+﻿{
+  "$schema": "/metadata/_schemas/extract/full-viw.json",
+  "ABI3": {
+    "Template": {
+      "Phase": "extract",
+      "Pattern": "full",
+      "Source": "viw",
+      "Implementation": "parallel",
+      "Version": 1
+    },
+    "Metadata": {
+      "Version": 1
+    }
+  },
+  "Object": {
+    "SourceObject": {
+      "Schema": "bi",
+      "Name": "vw_Sales__Store",
+      "FullName": "bi.vw_Sales__Store"
+    },
+    "DestinationTable": {
+      "Schema": "stg",
+      "Name": "Sales__Store",
+      "FullName": "[$(Object.DestinationTable.Schema)].[$(Object.DestinationTable.Name)]",
+      "CreatePrimaryKey": 1,
+      "Columns": "$$Run-Plugin::ColumnsMetadataCompiler['$(Connections.Helpers[1].ConnectionString)', '$(Object.SourceObject.Schema)', '$(Object.SourceObject.Name)', 'ODBC']"
+    },
+    "PrimaryKeyColumns": [
+      "BusinessEntityID"
+    ]
+  },
+  "Connections": {
+    "Helpers": [
+      {
+        "Name": "HLP",
+        "Database": "AdaptiveBI30_HLP",
+        "ConnectionString": "Data Source=localhost;Initial Catalog=$(Connections.Helpers[0].Database);Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False"
+      },
+      {
+        "Name": "HLP2",
+        "Database": "AdaptiveBI30_HLP",
+        "ConnectionString": "Driver={SQL Server Native Client 11.0};Server=localhost;Database=$(Connections.Helpers[0].Database);Trusted_Connection=yes;"
+      }
+    ]
+  }
+}
