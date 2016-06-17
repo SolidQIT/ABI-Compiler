@@ -108,7 +108,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties metadata_2extract_2Person____Person____VIW__FS_1json__JSONSchema="C:\Work\AdaptiveBI\SolidQ\3.0\ABI-Prototype-branch-dm\ABI\metadata\_schemas\extract\full-viw.json" metadata_2__schemas_2extract_2full-single_1json__JSONSchema="C:\Work\AdaptiveBI\SolidQ\3.0\ABI-Prototype-branch-dm\ABI\metadata\_schemas\extract\full-single.json" />
+      <UserProperties metadata_2__schemas_2extract_2full-single_1json__JSONSchema="C:\Work\AdaptiveBI\SolidQ\3.0\ABI-Prototype-branch-dm\ABI\metadata\_schemas\extract\full-single.json" metadata_2extract_2Person____Person____VIW__FS_1json__JSONSchema="C:\Work\AdaptiveBI\SolidQ\3.0\ABI-Prototype-branch-dm\ABI\metadata\_schemas\extract\full-viw.json" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

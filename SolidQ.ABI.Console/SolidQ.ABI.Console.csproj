@@ -117,7 +117,16 @@
     <None Include="templates\extract\_full.liquid">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="templates\test-with_my_extension_in_name.1.txt.liquid">
+    <None Include="templates\test-with_my_other_extension_in_name.1.txt.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\test-with_my_extension_in_name.1.ext.txt.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\test.1.a.sql.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\test.1.b.sql.liquid">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="templates\test.1.sql.liquid">

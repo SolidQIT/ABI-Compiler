@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SolidQ.ABI.Compiler.Infrastructure
 {
@@ -356,7 +357,8 @@ namespace SolidQ.ABI.Compiler.Infrastructure
                 outputPath = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(metadataFile.FullName));
                 _logger.Info("Using output path '{0}'", outputPath);
 
-                string outputFile = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(metadataFile.FullName) + Path.GetExtension(Path.GetFileNameWithoutExtension(templateFile)));
+                string outputFile = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(metadataFile.FullName) + GetTemplateFileExtension(templateFile));
+                
                 _logger.Info("Writing output file '{0}'", outputFile.Replace(_options.OutputPath, string.Empty));
                 _logger.Debug("Output file full path '{0}'", outputFile);
 
@@ -388,6 +390,33 @@ namespace SolidQ.ABI.Compiler.Infrastructure
             }
 
             return errorsCount;
-        }       
+        }     
+        
+        internal string GetTemplateFileExtension(string templateFileFullName)
+        {
+            _logger.Debug("Extracting extension from template: {0}", templateFileFullName);
+            templateFileFullName = Path.GetFileName(templateFileFullName);
+
+            string result = string.Empty;
+
+            Regex rg = new Regex(@"(\.[\d]*)(.*)(\.liquid[^.]*)", RegexOptions.IgnoreCase);
+            Match m = rg.Match(templateFileFullName);
+
+
+            if (m.Groups.Count == 4)
+            { 
+                result = m.Groups[2].Value;
+            }
+            else
+            {
+                ApplicationException ae = new ApplicationException("Template file name has some missing part. Expected format is <pattern-source-implementation>.<version>[.<extension>].<extension>.liquid."); 
+                _logger.Error(ae);
+                throw ae;
+            }
+
+            _logger.Debug("Extracted extension: {0}", result);
+
+            return result;
+        }  
     }
 }
