@@ -7,12 +7,12 @@ namespace SolidQ.ABI.Compiler.Infrastructure.Helper
     {
         public static Hash FromStrictDictionary(this IDictionary<string, object> dictionary)
         {
-            Hash result = new Hash(); 
+            var result = new Hash();
 
-            //Hash result = new Hash((h, k) => { throw new Exception("Unknown variable '" + k + "'"); }); // Removed for now since it make "includes" not working
+            //var result = new Hash((h, k) => { throw new Exception("Unknown variable '" + k + "'"); }); // Removed for now since it make "includes" not working
 
-            foreach (var keyValue in dictionary)
-                result.Add(keyValue);
+            foreach (var item in dictionary)
+                result.Add(item);
 
             return result;
         }

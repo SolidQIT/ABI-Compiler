@@ -22,10 +22,12 @@ namespace SolidQ.ABI.Compiler.Infrastructure
             {
                 return objectType == typeof(string);
             }
+
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
             {
                 return reader.Value;
             }
+
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
                 writer.WriteRawValue((string)value);
@@ -39,9 +41,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure
                 .FirstOrDefault();
             
             if (attribute != null)
-            {
                 return ((DescriptionAttribute)attribute.First()).Description;
-            }
 
             return @enum.ToString();
         }
@@ -58,7 +58,6 @@ namespace SolidQ.ABI.Compiler.Infrastructure
                 {
                     Expression = m.Groups["expression"].Value,
                     Name = m.Groups["name"].Value,
-                    //Arguments = m.Groups["arguments"].Value
                     Arguments = Regex.Unescape(m.Groups["arguments"].Value)
                         .Split(',') // do not use StringSplitOptions.RemoveEmptyEntries
                         .Select((a) => a.Trim(new[] { ' ', '\'' }))
@@ -69,21 +68,25 @@ namespace SolidQ.ABI.Compiler.Infrastructure
 
             #region Print debug expressions
 
-            _logger.Debug("Plugin expressions found '{0}'", pluginExpressions.Count);            
+            _logger.Debug($"Plugin expressions found '{ pluginExpressions.Count }'"); 
+                       
             foreach (var plugin in pluginExpressions)
             {
-                _logger.Debug("\tExpression '{0}'", plugin.Expression);
-                _logger.Debug("\t\tPlugin '{0}'", plugin.Name);
+                _logger.Debug($"\tExpression '{ plugin.Expression }'");
+                _logger.Debug($"\t\tPlugin '{ plugin.Name }'");
+
                 foreach (var argument in plugin.Arguments)
-                    _logger.Debug("\t\tArgument '{0}'", argument);
+                    _logger.Debug($"\t\tArgument '{ argument }'");
             }
 
             #endregion
 
             _logger.Info("Collecting plugins");
+
             using (var collector = new PluginCollector())
             {
-                _logger.Info("Plugins found '{0}'", collector.Plugins.Count);
+                _logger.Info($"Plugins found '{ collector.Plugins.Count }'");
+
                 foreach (var plugin in collector.Plugins)
                     _logger.Debug($"\tPlugin '{ plugin.Name }' - '{ plugin.Version }' - '{ plugin.Description }'");
 
@@ -94,7 +97,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure
                     var plugin = collector.Plugins.SingleOrDefault((p) => p.Name.Equals(expression.Name, StringComparison.InvariantCultureIgnoreCase));
                     if (plugin == null)
                     {
-                        _logger.Warn("Plugin not found for expression '{0}'", expression.Expression);
+                        _logger.Warn($"Plugin not found for expression '{ expression.Expression }'");
                         warnings++;
                         continue;
                     }
@@ -103,7 +106,8 @@ namespace SolidQ.ABI.Compiler.Infrastructure
 
                     #region Execute plugin
 
-                    _logger.Info("Executing plugin '{0}' - '{1}' - '{2}'", plugin.Name, plugin.Version, plugin.Description);
+                    _logger.Info($"Executing plugin '{ plugin.Name }' - '{ plugin.Version }' - '{ plugin.Description }'");
+
                     plugin.Initialize(_logger.Factory);
                     try
                     {
@@ -111,9 +115,15 @@ namespace SolidQ.ABI.Compiler.Infrastructure
                         {
                             pluginResult = (plugin as IMetadataCompilerPlugin).Compile(expression.Arguments);                        
                         }
+                        /*
+                         * else if (plugin is I<MyCustom>CompilerPlugin)
+                         * {
+                         *      pluginResult = (plugin as I<MyCustom>CompilerPlugin).Compile(expression.Arguments);
+                         * }
+                         */
                         else
                         {
-                            throw new ApplicationException(string.Format("Plugin interface unidentified for expression '{0}'", expression.Expression));
+                            throw new ApplicationException($"Invalid plugin type in expression '{ expression.Expression }'");
                         }
                     }
                     finally
@@ -123,19 +133,19 @@ namespace SolidQ.ABI.Compiler.Infrastructure
 
                     #endregion
 
-                    _logger.Debug("Resolved plugin expression type is '{0}' => '{1}'", pluginResult.Get‌​Type(), pluginResult);
+                    _logger.Debug($"Resolved plugin expression type is '{ pluginResult.Get‌​Type() }' => '{ pluginResult }'");
 
                     var replaceExpression = expression.Expression;
                     // Add beginning and trailing quotes, since we're replacing a json value fragment with raw string json object.
                     if (!(pluginResult is JValue))
                         replaceExpression = "\"" + expression.Expression + "\"";
-
-                    //resolvedJson = resolvedJson.Replace(replaceExpression, pluginResult.ToString().Replace("\\\\", "\\"));
+                    
                     resolvedJson = resolvedJson.Replace(replaceExpression, pluginResult.ToString());
                 }
 
                 _logger.Info("Parsing resolved plugin metadata");
                 _logger.Debug(resolvedJson);
+
                 return JObject.Parse(resolvedJson);
             }
         }
@@ -161,7 +171,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure
 
             foreach (var item in expressions.Where((e) => e.Token == null || !(e.Token is JValue || e.Token is JObject || e.Token is JArray)))
             {
-                _logger.Warn("Reference to '{0}' not found.", item.Path);
+                _logger.Warn($"Reference to '{ item.Path }' not found.");
                 warnings++;
             };
 
@@ -215,13 +225,14 @@ namespace SolidQ.ABI.Compiler.Infrastructure
                     replaceExpression = "\"" + item.Expression + "\"";
 
                 resolvedJson = resolvedJson.Replace(replaceExpression, replaceToken);
-                _logger.Debug("Resolved reference: '{0}' => '{1}'", replaceExpression, replaceToken);
+                _logger.Debug($"Resolved reference: '{ replaceExpression }' => '{ replaceToken }'");
             };
 
             #endregion
 
             _logger.Info("Parsing resolved metadata");
             _logger.Debug(resolvedJson);
+
             return JObject.Parse(resolvedJson);
         }
     }

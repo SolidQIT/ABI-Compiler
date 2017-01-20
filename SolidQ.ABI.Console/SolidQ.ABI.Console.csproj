@@ -60,6 +60,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CommandLine\Options\PluginOptions.cs" />
     <Compile Include="CommandLine\Options\ValidateOptions.cs" />
     <Compile Include="CommandLine\Options\UploadOptions.cs" />
@@ -67,7 +71,6 @@
     <Compile Include="CommandLine\Options\ExtractOptions.cs" />
     <Compile Include="CommandLine\Options\CompileOptions.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

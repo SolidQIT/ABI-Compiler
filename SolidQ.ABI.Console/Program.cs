@@ -2,12 +2,11 @@
 using NLog;
 using SolidQ.ABI.CommandLine.Options;
 using SolidQ.ABI.Compiler;
-using SolidQ.ABI.Extensibility;
 using SolidQ.ABI.Compiler.Infrastructure.Extensibility;
 using System;
 using System.Configuration;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
 
 namespace SolidQ.ABI
 {
@@ -34,7 +33,8 @@ namespace SolidQ.ABI
 
             var result = Parser.Default
                 .ParseArguments<CompileOptions, ValidateOptions, PluginsOptions>(args)
-                .MapResult(
+                .MapResult
+                (
                     (CompileOptions opts) => Compile(opts),
                     (PluginsOptions opts) => Plugins(opts),
                     (ValidateOptions opts) => Validate(opts),
@@ -42,9 +42,10 @@ namespace SolidQ.ABI
                     {
                         foreach (var error in errs)
                         {
-                            if (!((error is HelpRequestedError) || (error is HelpVerbRequestedError))) 
-                            _logger.Error(ErrorArgumentParsingFailedMessageFormat, error.Tag);
+                            if (!(error is HelpRequestedError) || (error is HelpVerbRequestedError))
+                                _logger.Error(ErrorArgumentParsingFailedMessageFormat, error.Tag);
                         }
+
                         return ErrorArgumentParsingFailed;
                     }
                 );
@@ -96,32 +97,34 @@ namespace SolidQ.ABI
 
         private static int Plugins(PluginsOptions pluginsOptions)
         {
-            if (pluginsOptions.Action.ToLower() == "list")
+            var action = pluginsOptions.Action.ToLower();
+            if (action == "list")
             {
-                PluginCollector collector = new PluginCollector();
-
-                _logger.Info("Plugins found: {0}", collector.Plugins.Count);
-                foreach (var plugin in collector.Plugins)
+                using (var collector = new PluginCollector())
                 {
-                    _logger.Info("- {0} v.{1}: {2}", plugin.Name, plugin.Version, plugin.Description);
+                    _logger.Info($"Plugins found: { collector.Plugins.Count }");
+
+                    foreach (var plugin in collector.Plugins)
+                        _logger.Info($"- { plugin.Name } v.{ plugin.Version }: { plugin.Description }");
                 }
             }
-
-            if (pluginsOptions.Action.ToLower() == "help")
+            else if (action == "help")
             {
-                PluginCollector collector = new PluginCollector();
-                var plugin = collector.Plugins.SingleOrDefault((p) => p.Name.Equals(pluginsOptions.PluginName, StringComparison.InvariantCultureIgnoreCase));
-                if (plugin != null)
+                using (var collector = new PluginCollector())
                 {
-                    plugin.Initialize(_logger.Factory);
-                    _logger.Info("{0} v.{1}", plugin.Name, plugin.Version);
-                    _logger.Info("by {0}", plugin.Author);
-                    _logger.Info(plugin.Description);
-                    _logger.Info(plugin.Help);
-                    plugin.Shutdown();
-                }
+                    var plugin = collector.Plugins.SingleOrDefault((p) => p.Name.Equals(pluginsOptions.PluginName, StringComparison.InvariantCultureIgnoreCase));
+                    if (plugin != null)
+                    {
+                        plugin.Initialize(_logger.Factory);
 
-                _logger.Warn(ErrorArgumentVerbNotImplemented);
+                        _logger.Info($"{ plugin.Name } v.{ plugin.Version }");
+                        _logger.Info($"by { plugin.Author }");
+                        _logger.Info(plugin.Description);
+                        _logger.Info(plugin.Help);
+
+                        plugin.Shutdown();
+                    }
+                }
             }
 
             return 0;

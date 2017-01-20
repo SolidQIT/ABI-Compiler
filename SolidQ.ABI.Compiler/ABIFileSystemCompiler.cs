@@ -53,9 +53,10 @@ namespace SolidQ.ABI.Compiler
                     return ABIExitCode.ErrorDuringValidation;
 
                 var engine = new CompilerEngine(options, factory);
-
                 var result = engine.Compile();
+
                 Debug.Assert(result != ABIExitCode.ErrorExitCodeUnassigned);
+
                 return result;
             }
             catch (Exception ex) // avoid external unhandled exceptions
@@ -81,11 +82,11 @@ namespace SolidQ.ABI.Compiler
 
             foreach (var assembly in liquidAssemblies)
             {
-                _logger.Info("Using {0} v{1}", assembly.Name, assembly.Version);
+                _logger.Info($"Using { assembly.Name } v{ assembly.Version }");
 
                 if (assembly.Version.CompareTo(liquidRequiredVersion) != 0)
                 {
-                    _logger.Error("DotLiquid v{0} is needed to work properly", liquidRequiredVersion);
+                    _logger.Error($"DotLiquid v{ liquidRequiredVersion } is needed to work properly");
                     validated = false;
                 }
             }
@@ -98,23 +99,20 @@ namespace SolidQ.ABI.Compiler
 
             if (!Directory.Exists(options.MetadataPath))
             {
-                _logger.Error("Metadata path not found [{0}]", options.MetadataPath);
+                _logger.Error($"Metadata path not found [{ options.MetadataPath }]");
                 validated = false;
             }
 
             if (!Directory.Exists(options.TemplatePath))
             {
-                _logger.Error("Template path not found [{0}]", options.TemplatePath);
+                _logger.Error($"Template path not found [{ options.TemplatePath }]");
                 validated = false;
             }
 
             if (!Directory.Exists(options.OutputPath))
             {
-                _logger.Info("Output path not found. Folders have been created [{0}]", options.OutputPath);
+                _logger.Info($"Output path not found. Folders have been created [{ options.OutputPath }]");
                 Directory.CreateDirectory(options.OutputPath);
-
-                //_logger.Error("\tOutput path not found [{0}]", options.OutputPath);
-                //validated = false;
             }
 
             #endregion
@@ -125,7 +123,7 @@ namespace SolidQ.ABI.Compiler
 
             if (!options.MetadataSearchPattern.ToLower().EndsWith(ABIFileSystemOptions.StandardMetadataFileExtension))
             {
-                _logger.Error("Invalid metadata search pattern [{0}]", options.MetadataSearchPattern);
+                _logger.Error($"Invalid metadata search pattern [{ options.MetadataSearchPattern }]");
                 validated = false;
             }                
 

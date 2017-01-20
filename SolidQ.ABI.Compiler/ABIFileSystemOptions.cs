@@ -92,26 +92,23 @@ namespace SolidQ.ABI.Compiler
             _metadataFolder = metadataFolder;
             _templateFolder = templateFolder;
             _outputFolder = outputFolder;
-
-            rootPath = Path.GetFullPath(rootPath);
-
-            _rootPath = rootPath;
+            _rootPath = Path.GetFullPath(rootPath);
         }
 
         public override string ToString()
         {
             var builder = new StringBuilder();
 
-            builder.AppendFormat("Compile Options:\r\n");
+            builder.AppendLine("Compile Options:");
 
-            builder.AppendFormat("\tRootPath: {0}\r\n", RootPath);
-            builder.AppendFormat("\tSchemaPath: {0}\r\n", SchemaPath);
-            builder.AppendFormat("\tMetadataPath: {0}\r\n", MetadataPath);
-            builder.AppendFormat("\tOutputPath: {0}\r\n", OutputPath);
-            builder.AppendFormat("\tTemplatePath: {0}\r\n", TemplatePath);
-            builder.AppendFormat("\tCommonMetadataPath: {0}\r\n", CommonMetadataPath);
-            builder.AppendFormat("\tMetadataSearchPattern: {0}\r\n", MetadataSearchPattern);
-            builder.AppendFormat("\tMetadataSearchSubDirectories: {0}\r\n", MetadataSearchSubDirectories);
+            builder.AppendLine($"\tRootPath: { RootPath }" );
+            builder.AppendLine($"\tSchemaPath: { SchemaPath }" );
+            builder.AppendLine($"\tMetadataPath: { MetadataPath }" );
+            builder.AppendLine($"\tOutputPath: { OutputPath }" );
+            builder.AppendLine($"\tTemplatePath: { TemplatePath }" );
+            builder.AppendLine($"\tCommonMetadataPath: { CommonMetadataPath }" );
+            builder.AppendLine($"\tMetadataSearchPattern: { MetadataSearchPattern }" );
+            builder.AppendLine($"\tMetadataSearchSubDirectories: { MetadataSearchSubDirectories }" );
 
             return builder.ToString();
         }

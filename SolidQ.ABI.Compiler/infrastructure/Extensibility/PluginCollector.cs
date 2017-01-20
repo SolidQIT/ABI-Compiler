@@ -38,6 +38,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure.Extensibility
                 .Where((g) => g.Count() > 1)
                 .Select((g) => g.Key)
                 .ToArray();
+
             if (duplicatedPlugins.Length > 0)
                 throw new ApplicationException(string.Format("Duplicated plugin names found [{0}]", string.Join(";", duplicatedPlugins)));
 

@@ -46,7 +46,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure
                 .ToList();
 
             foreach (var item in commonMetadataFiles)
-                _logger.Info("\t{0}", item.RelativePath);
+                _logger.Info($"\t{ item.RelativePath }");
 
             if (commonMetadataFiles.Count == 0)
                 _logger.Info("Common metadata files not found");
@@ -68,7 +68,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure
                 .ToList();
 
             foreach (var item in metadataFiles)
-                _logger.Info("\t{0}", item.RelativePath);
+                _logger.Info($"\t{ item.RelativePath }");
 
             if (metadataFiles.Count == 0)
                 _logger.Error("Metadata files not found");
@@ -97,6 +97,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure
             }
 
             _logger.Info("All metadata files compiled, listing results:");
+
             foreach (var metadataFile in metadataFiles)
                 _logger.Info("\tArtifacts = {0,-2}, Warnings = {1,-2} - {2}", metadataFile.Result.Artifacts, metadataFile.Result.Warnings, metadataFile.RelativePath);
 
@@ -107,6 +108,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure
             }
 
             _logger.Info("Done");
+
             return ABIExitCode.CompileCompleted;
         }
 
@@ -151,7 +153,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure
             #region Extended metadata
 
             _logger.Info("Looking for extended metadata");
-            _logger.Debug("Extended metadata file '{0}'", metadataFile.ExtendedRelativePath);
+            _logger.Debug($"Extended metadata file '{ metadataFile.ExtendedRelativePath }'");
 
             if (!File.Exists(metadataFile.ExtendedFullName))
             {
@@ -159,10 +161,10 @@ namespace SolidQ.ABI.Compiler.Infrastructure
             }
             else
             {
-                _logger.Info("Parsing extended metadata file '{0}'", metadataFile.ExtendedRelativePath);
+                _logger.Info($"Parsing extended metadata file '{  metadataFile.ExtendedRelativePath }'");
                 metadataFile.ParseExtendedJson();
 
-                _logger.Info("Merging extended metadata file '{0}'", metadataFile.ExtendedRelativePath);
+                _logger.Info($"Merging extended metadata file '{ metadataFile.ExtendedRelativePath }'");
                 metadataFile.Json.Merge(metadataFile.ExtendedJson, new JsonMergeSettings() { MergeArrayHandling = MergeArrayHandling.Union });
             }
 
@@ -171,21 +173,22 @@ namespace SolidQ.ABI.Compiler.Infrastructure
             #region Analyze metadata
 
             _logger.Info("Analyzing metadata");
+
             if (metadataFile.Json["ABI3"] == null)
                 return ABIExitCode.ErrorABISectionMissingInMetadata;
             
             _logger.Info("Reading project directives");
-            _logger.Info("\tTargetSQLPlatformVersion: '{0}'", metadataFile.TargetSQLPlatformVersion);
+            _logger.Info($"\tTargetSQLPlatformVersion: '{ metadataFile.TargetSQLPlatformVersion }'");
 
             _logger.Info("Reading template directives");
             if (metadataFile.Template == null)
                 return ABIExitCode.ErrorTemplateSectionMissingInMetadata;
                   
-            _logger.Info("\tPhase: '{0}'", metadataFile.Phase);
-            _logger.Info("\tPattern: '{0}'", metadataFile.Pattern);
-            _logger.Info("\tSource: '{0}'", metadataFile.Source);
-            _logger.Info("\tImplementation: '{0}'", metadataFile.Implementation);
-            _logger.Info("\tVersion: '{0}'", metadataFile.Version);
+            _logger.Info($"\tPhase: '{ metadataFile.Phase }'");
+            _logger.Info($"\tPattern: '{ metadataFile.Pattern }'");
+            _logger.Info($"\tSource: '{ metadataFile.Source }'");
+            _logger.Info($"\tImplementation: '{ metadataFile.Implementation }'");
+            _logger.Info($"\tVersion: '{ metadataFile.Version }'");
 
             if (string.IsNullOrEmpty(metadataFile.Pattern))
                 return ABIExitCode.ErrorTemplatePatternMissingInMetadata;
@@ -223,6 +226,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure
             #region Schema validation
 
             _logger.Info("Looking for $schema");
+
             string fileSchema = (string)metadataFile.Json["$schema"];
 
             if (string.IsNullOrEmpty(fileSchema))
@@ -233,10 +237,12 @@ namespace SolidQ.ABI.Compiler.Infrastructure
             {
                 _logger.Info("$schema element found, attempting validation");
 
-                if (fileSchema.StartsWith("/")) fileSchema = "." + fileSchema;
+                if (fileSchema.StartsWith("/"))
+                    fileSchema = "." + fileSchema;
+
                 fileSchema = Path.GetFullPath(Path.Combine(_options.RootPath, fileSchema.Replace("/", "\\")));            
                 
-                _logger.Debug("$schema file path is '{0}'", fileSchema);
+                _logger.Debug($"$schema file path is '{ fileSchema }'");
 
                 if (!File.Exists(fileSchema))
                 {
@@ -285,10 +291,10 @@ namespace SolidQ.ABI.Compiler.Infrastructure
             }
             else
             {
-                _logger.Debug("Template path for TargetSQLPlatformVersion '{0}' not found. Falling back to catch-all folder.", templatePathVersionSpecific);
+                _logger.Debug($"Template path for TargetSQLPlatformVersion '{ templatePathVersionSpecific }' not found. Falling back to catch-all folder.");
             }
 
-            _logger.Info("Using template path '{0}'", templatePath);
+            _logger.Info($"Using template path '{ templatePath }'");
 
             #endregion
 
@@ -303,7 +309,7 @@ namespace SolidQ.ABI.Compiler.Infrastructure
             string baseTemplateSearchPattern = templateSearchPattern + "." + metadataFile.Version + ".*";
             string extendedTemplateSearchPattern = templateSearchPattern + "-*." + metadataFile.Version + ".*";
 
-            _logger.Info("Template search patterns '{0}' '{1}'", baseTemplateSearchPattern, extendedTemplateSearchPattern);
+            _logger.Info($"Template search patterns are '{ baseTemplateSearchPattern }' '{ extendedTemplateSearchPattern }'");
 
             #endregion 
 
@@ -312,8 +318,9 @@ namespace SolidQ.ABI.Compiler.Infrastructure
                 .OrderBy((path) => path)
                 .ToList();
 
-            _logger.Info("Template files found '{0}'", templateFiles.Count);
+            _logger.Info($"Template files found '{ templateFiles.Count }'");
             _logger.Debug("Listing template files found");
+
             foreach (string templateFile in templateFiles)
                 _logger.Debug("\t'{0}'", templateFile.Replace(templatePath, string.Empty));
 
@@ -355,17 +362,18 @@ namespace SolidQ.ABI.Compiler.Infrastructure
                 if (metadataFile.Phase.ToLower() == "load")
                     outputPath = Path.Combine(outputPath, metadataFile.Pattern);
                 outputPath = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(metadataFile.FullName));
-                _logger.Info("Using output path '{0}'", outputPath);
+                _logger.Info($"Using output path '{ outputPath }'");
 
                 string outputFile = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(metadataFile.FullName) + GetTemplateFileExtension(templateFile));
                 
                 _logger.Info("Writing output file '{0}'", outputFile.Replace(_options.OutputPath, string.Empty));
-                _logger.Debug("Output file full path '{0}'", outputFile);
+                _logger.Debug($"Output file full path '{ outputFile }'");
 
                 Directory.CreateDirectory(outputPath);
                 File.WriteAllText(outputFile, outputFileContent);
 
                 metadataFile.Result.Artifacts += 1;
+
                 #endregion
             }
 
@@ -392,31 +400,19 @@ namespace SolidQ.ABI.Compiler.Infrastructure
             return errorsCount;
         }     
         
-        internal string GetTemplateFileExtension(string templateFileFullName)
+        internal string GetTemplateFileExtension(string templateFilePath)
         {
-            _logger.Debug("Extracting extension from template: {0}", templateFileFullName);
-            templateFileFullName = Path.GetFileName(templateFileFullName);
+            _logger.Debug($"Extracting extension from template '{ templateFilePath }'");
+            
+            var match = Regex.Match(input: Path.GetFileName(templateFilePath), pattern: @"(\.[\d]*)(.*)(\.liquid[^.]*)", options: RegexOptions.IgnoreCase);
+            if (match.Success == false || match.Groups.Count != 4)
+                throw new ApplicationException("Template file name has some missing part. Expected format is '<pattern-source-implementation>.<version>[.<extension>].<extension>.liquid'.");
 
-            string result = string.Empty;
+            var extension = match.Groups[2].Value;
 
-            Regex rg = new Regex(@"(\.[\d]*)(.*)(\.liquid[^.]*)", RegexOptions.IgnoreCase);
-            Match m = rg.Match(templateFileFullName);
+            _logger.Debug($"Extracted extension '{ extension }'");
 
-
-            if (m.Groups.Count == 4)
-            { 
-                result = m.Groups[2].Value;
-            }
-            else
-            {
-                ApplicationException ae = new ApplicationException("Template file name has some missing part. Expected format is <pattern-source-implementation>.<version>[.<extension>].<extension>.liquid."); 
-                _logger.Error(ae);
-                throw ae;
-            }
-
-            _logger.Debug("Extracted extension: {0}", result);
-
-            return result;
+            return extension;
         }  
     }
 }

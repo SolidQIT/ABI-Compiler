@@ -15,13 +15,9 @@ namespace SolidQ.ABI.Infrastructure.Helper
             switch (token.Type)
             {
                 case JTokenType.Object:
-                    return token.Children<JProperty>()
-                                .ToDictionary(prop => prop.Name,
-                                              prop => ToObject(prop.Value));
-
+                    return token.Children<JProperty>().ToDictionary(prop => prop.Name, prop => ToObject(prop.Value));
                 case JTokenType.Array:
                     return token.Select(ToObject).ToList();
-
                 default:
                     return ((JValue)token).Value;
             }

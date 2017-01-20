@@ -1,5 +1,4 @@
 ﻿using SolidQ.ABI.Compiler.Infrastructure;
-using System;
 
 namespace SolidQ.ABI.Compiler
 {
