@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolidQ.ABI.Compiler.Tests
+﻿namespace SolidQ.ABI.Compiler.Tests
 {
     internal class Utilities
     {
@@ -13,7 +7,7 @@ namespace SolidQ.ABI.Compiler.Tests
             if (value == null)
                 return null;
 
-            while (value.IndexOf(" ") != -1) value = value.Replace(" ", "");
+            while (value.IndexOf(" ")  != -1) value = value.Replace(" ",  "");
             while (value.IndexOf("\t") != -1) value = value.Replace("\t", "");
             while (value.IndexOf("\r") != -1) value = value.Replace("\r", "");
             while (value.IndexOf("\n") != -1) value = value.Replace("\n", "");

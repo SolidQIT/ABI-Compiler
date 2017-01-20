@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SolidQ.ABI.Compiler.Infrastructure;
+using System.Diagnostics;
 
 namespace SolidQ.ABI.Compiler.Tests
 {
@@ -598,8 +599,8 @@ namespace SolidQ.ABI.Compiler.Tests
 
             json = json.ResolvePluginExpressions(ref warnings);
 
-            System.Diagnostics.Debug.Print(Utilities.Linearize(json.ToString(Formatting.None)));
-            System.Diagnostics.Debug.Print(Utilities.Linearize(jsonOutput));
+            Debug.Print(Utilities.Linearize(json.ToString(Formatting.None)));
+            Debug.Print(Utilities.Linearize(jsonOutput));
 
             Assert.AreEqual<int>(0, warnings);
             Assert.AreEqual(Utilities.Linearize(json.ToString(Formatting.None)), Utilities.Linearize(jsonOutput));
@@ -630,8 +631,8 @@ namespace SolidQ.ABI.Compiler.Tests
 
             json = json.ResolvePluginExpressions(ref warnings);
 
-            System.Diagnostics.Debug.Print(Utilities.Linearize(json.ToString(Formatting.None)));
-            System.Diagnostics.Debug.Print(Utilities.Linearize(jsonOutput));
+            Debug.Print(Utilities.Linearize(json.ToString(Formatting.None)));
+            Debug.Print(Utilities.Linearize(jsonOutput));
 
             Assert.AreEqual<int>(0, warnings);
             Assert.AreEqual(Utilities.Linearize(json.ToString(Formatting.None)), Utilities.Linearize(jsonOutput));
