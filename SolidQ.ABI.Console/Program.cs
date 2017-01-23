@@ -6,7 +6,6 @@ using SolidQ.ABI.Compiler.Infrastructure.Extensibility;
 using System;
 using System.Configuration;
 using System.Linq;
-using System.Reflection;
 
 namespace SolidQ.ABI
 {
@@ -24,12 +23,7 @@ namespace SolidQ.ABI
 
         public static int Main(string[] args)
         {
-#if DEBUG
-            _logger.Info("DEBUG Compile");
-#endif
-            _logger.Info("{0} v{1}", Assembly.GetExecutingAssembly().GetName().Name, Assembly.GetExecutingAssembly().GetName().Version);
-            _logger.Info("{0} v{1}", ABIFileSystemCompiler.Name, ABIFileSystemCompiler.Version);
-            _logger.Info("");
+            _logger.Info($"{ ABICompiler.Name } v{ ABICompiler.Version } ({ ABICompiler.Configuration })");
 
             var result = Parser.Default
                 .ParseArguments<CompileOptions, ValidateOptions, PluginsOptions>(args)

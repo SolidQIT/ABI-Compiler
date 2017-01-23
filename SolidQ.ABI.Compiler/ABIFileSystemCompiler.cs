@@ -8,40 +8,19 @@ using System.Reflection;
 
 namespace SolidQ.ABI.Compiler
 {
-    public class ABIFileSystemCompiler
+    public class ABIFileSystemCompiler : ABICompiler
     {
-        private static Assembly ExecutingAssembly = Assembly.GetExecutingAssembly();
         private static Logger _logger;
-
-        #region Properties
-
-        public static string Name
-        {
-            get
-            {
-                return ExecutingAssembly.GetName().Name;
-            }
-        }
-
-        public static Version Version
-        {
-            get
-            {
-                return ExecutingAssembly.GetName().Version;
-            }
-        }
-
-        #endregion
 
         public static ABIExitCode Compile(ABIFileSystemOptions options, LogFactory factory)
         {
             #region Argument exceptions
 
             if (options == null)
-                throw new ArgumentNullException("options");
+                throw new ArgumentNullException(nameof(options));
 
             if (factory == null)
-                throw new ArgumentNullException("factory");
+                throw new ArgumentNullException(nameof(factory));
 
             #endregion
             
